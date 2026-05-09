@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Хор-бот — справочник</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;600&family=Literata:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --paper: #faf7f2;
+    --ink: #1a1510;
+    --muted: #6b6055;
+    --accent: #c85a1e;
+    --gold: #b8860b;
+    --green: #2d6a4f;
+    --border: #d4c9b8;
+    --code-bg: #ede8de;
+    --shadow: rgba(26,21,16,0.08);
+  }
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background: var(–bg);
+color: var(–ink);
+font-family: ‘Literata’, Georgia, serif;
+font-size: 17px;
+line-height: 1.75;
+}
+
+/* ── Header ── */
+.site-header {
+background: var(–ink);
+color: var(–bg);
+padding: 48px 24px 40px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+.site-header::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: repeating-linear-gradient(
+-45deg,
+transparent,
+transparent 18px,
+rgba(255,255,255,0.025) 18px,
+rgba(255,255,255,0.025) 19px
+);
+}
+.site-header h1 {
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(2rem, 6vw, 3.5rem);
+font-weight: 700;
+letter-spacing: -0.02em;
+position: relative;
+}
+.site-header h1 span { color: var(–accent); }
+.site-header .tagline {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.78rem;
+letter-spacing: 0.12em;
+color: #a09080;
+margin-top: 12px;
+position: relative;
+text-transform: uppercase;
+}
+
+/* ── TOC ── */
+.toc {
+max-width: 780px;
+margin: 36px auto;
+padding: 0 20px;
+}
+.toc-inner {
+background: var(–paper);
+border: 1px solid var(–border);
+border-radius: 4px;
+padding: 28px 32px;
+box-shadow: 0 2px 12px var(–shadow);
+}
+.toc-title {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.7rem;
+letter-spacing: 0.15em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 16px;
+}
+.toc-list { list-style: none; }
+.toc-list li { border-bottom: 1px dotted var(–border); }
+.toc-list li:last-child { border-bottom: none; }
+.toc-list a {
+display: flex;
+align-items: center;
+gap: 10px;
+padding: 8px 0;
+color: var(–ink);
+text-decoration: none;
+font-size: 0.95rem;
+transition: color 0.15s;
+}
+.toc-list a:hover { color: var(–accent); }
+.toc-list a .cmd {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.8rem;
+color: var(–accent);
+min-width: 110px;
+}
+
+/* ── Layout ── */
+.content {
+max-width: 780px;
+margin: 0 auto;
+padding: 0 20px 80px;
+}
+
+/* ── Sections ── */
+.section {
+background: var(–paper);
+border: 1px solid var(–border);
+border-radius: 4px;
+margin-bottom: 28px;
+overflow: hidden;
+box-shadow: 0 2px 12px var(–shadow);
+animation: fadeUp 0.4s ease both;
+}
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(16px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 18px 28px;
+border-bottom: 1px solid var(–border);
+background: var(–bg);
+cursor: pointer;
+user-select: none;
+}
+.section-header h2 {
+font-family: ‘Playfair Display’, serif;
+font-size: 1.25rem;
+font-weight: 700;
+flex: 1;
+}
+.section-header .cmd-badge {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.78rem;
+background: var(–ink);
+color: var(–bg);
+padding: 3px 10px;
+border-radius: 3px;
+letter-spacing: 0.05em;
+}
+.section-header .chevron {
+font-size: 0.8rem;
+color: var(–muted);
+transition: transform 0.2s;
+}
+.section.collapsed .chevron { transform: rotate(-90deg); }
+.section-body { padding: 24px 28px; }
+.section.collapsed .section-body { display: none; }
+
+h3 {
+font-family: ‘Playfair Display’, serif;
+font-size: 1.05rem;
+margin: 20px 0 8px;
+color: var(–ink);
+}
+h3:first-child { margin-top: 0; }
+
+p { margin-bottom: 14px; }
+p:last-child { margin-bottom: 0; }
+
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; }
+
+strong { font-weight: 600; }
+
+/* ── Code / terminal blocks ── */
+.terminal {
+background: var(–ink);
+color: #d4c9b8;
+border-radius: 4px;
+padding: 16px 20px;
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.82rem;
+line-height: 1.65;
+margin: 12px 0;
+overflow-x: auto;
+white-space: pre;
+}
+.terminal .u { color: #f5f0e8; }
+.terminal .b { color: #c85a1e; font-weight: 600; }
+.terminal .g { color: #6fcf97; }
+.terminal .y { color: #f2c94c; }
+.terminal .m { color: #bb86fc; }
+
+code {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.85em;
+background: var(–code-bg);
+padding: 1px 6px;
+border-radius: 3px;
+color: var(–accent);
+}
+
+/* ── Special blocks ── */
+.notice {
+border-left: 3px solid var(–accent);
+padding: 12px 16px;
+background: #fdf4ef;
+border-radius: 0 4px 4px 0;
+margin: 14px 0;
+font-size: 0.92rem;
+}
+.notice strong { color: var(–accent); }
+
+.tip {
+border-left: 3px solid var(–green);
+padding: 12px 16px;
+background: #f0f7f4;
+border-radius: 0 4px 4px 0;
+margin: 14px 0;
+font-size: 0.92rem;
+}
+
+/* ── Rates table ── */
+.rates-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+margin: 14px 0;
+}
+.rate-card {
+border: 1px solid var(–border);
+border-radius: 4px;
+padding: 16px;
+text-align: center;
+}
+.rate-card .type {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.72rem;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+color: var(–muted);
+}
+.rate-card .amount {
+font-family: ‘Playfair Display’, serif;
+font-size: 1.4rem;
+font-weight: 700;
+margin: 4px 0 2px;
+color: var(–ink);
+}
+.rate-card .sub { font-size: 0.82rem; color: var(–muted); }
+.rate-card.right { border-color: var(–gold); background: #fdf9ee; }
+.rate-card.left  { border-color: var(–border); }
+
+/* ── Commands table ── */
+.cmd-table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+.cmd-table th {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.7rem;
+text-transform: uppercase;
+letter-spacing: 0.1em;
+color: var(–muted);
+text-align: left;
+padding: 6px 12px;
+border-bottom: 2px solid var(–border);
+}
+.cmd-table td {
+padding: 10px 12px;
+border-bottom: 1px solid var(–border);
+font-size: 0.93rem;
+vertical-align: top;
+}
+.cmd-table tr:last-child td { border-bottom: none; }
+.cmd-table .cmd-cell {
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.82rem;
+color: var(–accent);
+white-space: nowrap;
+}
+.cmd-table tr.highlight td { background: #fdf4ef; }
+
+/* ── Situations ── */
+.situation {
+border: 1px solid var(–border);
+border-radius: 4px;
+margin-bottom: 12px;
+overflow: hidden;
+}
+.situation-q {
+background: var(–bg);
+padding: 12px 16px;
+font-weight: 600;
+font-size: 0.92rem;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+.situation-a {
+padding: 12px 16px;
+font-size: 0.92rem;
+background: var(–paper);
+}
+.situation-a code { font-size: 0.8em; }
+
+/* ── Fridge cheatsheet ── */
+.fridge {
+background: var(–ink);
+color: var(–bg);
+border-radius: 4px;
+padding: 28px;
+font-family: ‘IBM Plex Mono’, monospace;
+margin: 14px 0;
+}
+.fridge h4 {
+font-family: ‘IBM Plex Mono’, monospace;
+text-align: center;
+letter-spacing: 0.2em;
+font-size: 0.85rem;
+margin-bottom: 20px;
+border-bottom: 1px solid #3a3530;
+padding-bottom: 12px;
+}
+.fridge-row {
+display: flex;
+justify-content: space-between;
+padding: 6px 0;
+font-size: 0.85rem;
+border-bottom: 1px dotted #3a3530;
+}
+.fridge-row:last-child { border-bottom: none; }
+.fridge-row .label { color: #a09080; }
+.fridge-row .cmd { color: var(–accent); }
+
+.commandments {
+margin-top: 20px;
+font-size: 0.82rem;
+line-height: 1.8;
+}
+.commandments h4 {
+font-size: 0.75rem;
+letter-spacing: 0.15em;
+color: #a09080;
+border-bottom: 1px solid #3a3530;
+padding-bottom: 8px;
+margin-bottom: 12px;
+text-align: left;
+}
+.commandments ol { padding-left: 20px; }
+.commandments li { color: #d4c9b8; margin-bottom: 4px; }
+
+/* ── Calendar steps ── */
+.steps { list-style: none; padding: 0; margin: 14px 0; }
+.steps li {
+display: flex;
+gap: 14px;
+margin-bottom: 14px;
+align-items: flex-start;
+}
+.step-num {
+background: var(–ink);
+color: var(–bg);
+font-family: ‘IBM Plex Mono’, monospace;
+font-size: 0.75rem;
+font-weight: 600;
+width: 26px;
+height: 26px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+margin-top: 2px;
+}
+.steps .step-text { font-size: 0.93rem; }
+
+/* ── Future block ── */
+.future-item {
+border-left: 3px solid var(–border);
+padding: 14px 18px;
+margin-bottom: 14px;
+font-size: 0.93rem;
+}
+.future-item h4 {
+font-family: ‘Playfair Display’, serif;
+font-size: 1rem;
+margin-bottom: 6px;
+}
+
+/* ── Emoji icons ── */
+.icon { font-size: 1.1em; }
+
+/* ── Mobile ── */
+@media (max-width: 540px) {
+.section-body { padding: 18px; }
+.section-header { padding: 14px 18px; }
+.rates-grid { grid-template-columns: 1fr; }
+.fridge { padding: 18px; }
+}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Хор<span>-</span>бот</h1>
+  <p class="tagline">Справочник пользователя · Версия 1.0</p>
+</header>
+
+<div class="content">
+
+  <!-- TOC -->
+
+  <nav class="toc">
+    <div class="toc-inner">
+      <div class="toc-title">Содержание</div>
+      <ul class="toc-list">
+        <li><a href="#what"><span class="cmd">🎵 Что умеет</span><span>Возможности бота</span></a></li>
+        <li><a href="#start"><span class="cmd">/start</span><span>Привязка аккаунта</span></a></li>
+        <li><a href="#commands"><span class="cmd">Команды</span><span>Полный список</span></a></li>
+        <li><a href="#fact"><span class="cmd">/факт</span><span>После службы</span></a></li>
+        <li><a href="#calc"><span class="cmd">/расчёт</span><span>Посчитать деньги</span></a></li>
+        <li><a href="#schedule"><span class="cmd">/расписание</span><span>План на неделю/месяц</span></a></li>
+        <li><a href="#add"><span class="cmd">/добавить</span><span>Записать напрямую</span></a></li>
+        <li><a href="#people"><span class="cmd">/люди</span><span>Список певцов</span></a></li>
+        <li><a href="#situations"><span class="cmd">⚡ Ситуации</span><span>Типичные случаи</span></a></li>
+        <li><a href="#calendar"><span class="cmd">📅 Календарь</span><span>Подключение к телефону</span></a></li>
+        <li><a href="#faq"><span class="cmd">FAQ</span><span>Вопросы и ответы</span></a></li>
+        <li><a href="#fridge"><span class="cmd">🧊 Шпаргалка</span><span>На холодильник</span></a></li>
+        <li><a href="#future"><span class="cmd">🔭 Будущее</span><span>Что будет дальше</span></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Что умеет -->
+
+  <div class="section" id="what">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Что умеет бот</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Хор-бот заменяет три рутины коллектива: расчёт денег за службы, ведение расписания и синхронизацию правых служб в календарь телефона. Парня с калькулятором не нужно. Расписание не нужно править в чате. Бумажку с расписанием храма не нужно носить в кармане.</p>
+
+```
+  <div class="rates-grid">
+    <div class="rate-card right">
+      <div class="type">⭐ Правая служба</div>
+      <div class="amount">3 750 ₽</div>
+      <div class="sub">свой · 3 000 ₽ замена</div>
+    </div>
+    <div class="rate-card left">
+      <div class="type">Левая служба</div>
+      <div class="amount">1 750 ₽</div>
+      <div class="sub">свой · 1 500 ₽ замена</div>
+    </div>
+  </div>
+
+  <ul>
+    <li>Считает деньги за любой период с разбивкой по людям и дням</li>
+    <li>Различает правые/левые службы, своих и замен, основной состав и гостевых</li>
+    <li>Сводный расчёт «правые за неделю + левые за две» одной командой</li>
+    <li>Ведёт план на 6 месяцев вперёд: недельный режим и месячный обзор</li>
+    <li>Учитывает доп. службы (Вс 7:00 + 10:00 — две правых в один день) и отмены</li>
+    <li>Хранит данные в обычной Google-таблице — видно глазами, можно править вручную</li>
+    <li>Логирует все изменения: кто, когда, что поправил</li>
+    <li>Синхронизирует правые службы в Apple Calendar / Google Calendar</li>
+    <li>Работает в групповом чате и в личке одновременно с одной общей базой</li>
+  </ul>
+
+  <div class="tip">
+    <strong>Одно автоуведомление в неделю</strong> — суббота 19:00, пустая сетка расписания на следующую неделю. Больше — никогда.
+  </div>
+
+  <p style="color:var(--muted); font-size:0.88rem;">Бесплатно: хостинг Fly.io free tier, бесплатные API Google. Никакого ИИ — чистая логика.</p>
+</div>
+```
+
+  </div>
+
+  <!-- Где работает / Привязка -->
+
+  <div class="section" id="start">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Где работает и как привязать личку</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Бот живёт в двух местах одновременно:</p>
+      <ul>
+        <li><strong>В групповом чате</strong> — действия видят все. Сюда же приходит еженедельное автоуведомление о расписании.</li>
+        <li><strong>В личке</strong> — всё то же самое, но видишь только ты. Удобно когда нужно поправить состав не дёргая весь чат.</li>
+      </ul>
+      <p>База одна. Что поправил в личке — отображается у всех в группе при следующем <code>/расписание</code>.</p>
+
+```
+  <h3>Привязка лички (один раз)</h3>
+  <ul class="steps">
+    <li><span class="step-num">1</span><span class="step-text">Открой бота в Telegram (имя бота даст ответственный)</span></li>
+    <li><span class="step-num">2</span><span class="step-text">Напиши <code>/start</code></span></li>
+    <li><span class="step-num">3</span><span class="step-text">Бот покажет список имён без привязки — тапни своё</span></li>
+    <li><span class="step-num">4</span><span class="step-text">Готово. Теперь в личке работает</span></li>
+  </ul>
+
+  <div class="terminal"><span class="u">&gt; /start</span>
+```
+
+🎵 Привет! Я бот хора. Кто ты?
+
+<span class="g">[Виталий]</span>  <span class="g">[Сергей]</span>
+<span class="g">[Михаил]</span>   <span class="g">[Илья]</span>
+<span class="g">[Влад]</span>     <span class="g">[Дима маленький]</span>
+─────
+<span class="g">[Меня нет в списке]</span>
+
+<span class="u">> [Виталий]</span>
+
+🎵 Готово, Виталий! Теперь можешь работать со мной в личке.
+/help — список команд.</div>
+
+```
+  <div class="notice">Привязал не то имя или сменил аккаунт — <code>/отвязка</code>, потом снова <code>/start</code>.</div>
+</div>
+```
+
+  </div>
+
+  <!-- Команды -->
+
+  <div class="section" id="commands">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Команды</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <table class="cmd-table">
+        <thead>
+          <tr><th>Команда</th><th>Что делает</th></tr>
+        </thead>
+        <tbody>
+          <tr class="highlight"><td class="cmd-cell">/факт</td><td>После службы — подтвердить план или поправить</td></tr>
+          <tr class="highlight"><td class="cmd-cell">/расчёт</td><td>Посчитать деньги за период</td></tr>
+          <tr class="highlight"><td class="cmd-cell">/расписание</td><td>План: смотреть, отмечаться, ставить других</td></tr>
+          <tr><td class="cmd-cell">/добавить</td><td>Записать факт службы напрямую (если плана не было)</td></tr>
+          <tr><td class="cmd-cell">/люди</td><td>Список певцов: добавить, изменить тип</td></tr>
+          <tr><td class="cmd-cell">/удалить</td><td>Точечно удалить запись</td></tr>
+          <tr><td class="cmd-cell">/экспорт</td><td>Выгрузить CSV за период</td></tr>
+          <tr><td class="cmd-cell">/настройки</td><td>Ставки, времена, настройки календаря</td></tr>
+          <tr><td class="cmd-cell">/help</td><td>Список команд</td></tr>
+          <tr><td class="cmd-cell">/start</td><td>Привязка к команде (только в личке)</td></tr>
+          <tr><td class="cmd-cell">/отвязка</td><td>Отвязать себя от команды (только в личке)</td></tr>
+        </tbody>
+      </table>
+      <div class="tip">В 95% случаев нужны три: <code>/факт</code> (после службы), <code>/расчёт</code> (конец недели), <code>/расписание</code> (планирование).</div>
+    </div>
+  </div>
+
+  <!-- /факт -->
+
+  <div class="section" id="fact">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>После службы</h2>
+      <span class="cmd-badge">/факт</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Подтверждение того, что план сошёлся с реальностью.</p>
+
+```
+  <div class="terminal"><span class="u">&gt; /факт</span>
+```
+
+🎵 За какой день?
+<span class="g">[Сегодня]</span>  <span class="g">[Вчера]</span>  <span class="g">[Другая]</span>
+
+<span class="u">> [Сегодня]</span>
+
+🎵 Вс 10.05
+10:00 <span class="y">⭐</span> правая — Виталий, Сергей, Михаил, Илья
+17:00 левая — Прохор
+
+<span class="g">[✓ Подтвердить весь день]</span>
+<span class="g">[✓ Только 10:00]</span>
+<span class="g">[✓ Только 17:00]</span>
+<span class="g">[✏ Изменить по слотам]</span>
+
+<span class="u">> [Подтвердить весь день]</span>
+
+🎵 Готово.
+Записано в табель: 4 человека на правой 10:00, 1 человек на левой 17:00.</div>
+
+```
+  <h3>Три варианта подтверждения</h3>
+  <ul>
+    <li><strong>Весь день</strong> — если все слоты прошли как в плане.</li>
+    <li><strong>Только конкретная служба</strong> — утром всё прошло, а вечер ещё не начался.</li>
+    <li><strong>Изменить по слотам</strong> — если состав поменялся (Прохор не пришёл, Миша спел один).</li>
+  </ul>
+
+  <div class="tip"><code>/факт</code> можно открывать сколько угодно раз. Последняя версия перезаписывает предыдущую.</div>
+</div>
+```
+
+  </div>
+
+  <!-- /расчёт -->
+
+  <div class="section" id="calc">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Посчитать деньги</h2>
+      <span class="cmd-badge">/расчёт</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+
+```
+  <h3>⚡ Правые за прошлую неделю</h3>
+  <p>Один тап. Самый частый кейс. Период: понедельник 00:00 → воскресенье 23:59 предыдущей недели.</p>
+
+  <h3>📊 Правые + левые (с разными периодами)</h3>
+  <p>Когда правые надо за неделю, а левые — за 2 или 3.</p>
+
+  <div class="terminal"><span class="u">&gt; /расчёт → [Правые + левые]</span>
+```
+
+🎵 Правые за:
+<span class="g">[1 неделя ✓]</span>  <span class="g">[2 недели]</span>  <span class="g">[3 недели]</span>  <span class="g">[Свой период]</span>
+
+🎵 Левые за:
+<span class="g">[1 неделя]</span>  <span class="g">[2 недели ✓]</span>  <span class="g">[3 недели]</span>  <span class="g">[Свой период]</span>
+
+<span class="g">[Посчитать]</span>
+
+<span class="u">> [Посчитать]</span>
+
+🎵 Расчёт сводный
+Правые: 4–10 мая (1 неделя)
+Левые:  27.04 – 10 мая (2 недели)
+
+<span class="b">ВСЕГО: 41 250 ₽</span>
+правых: 22 500 ₽
+левых:  18 750 ₽
+
+✏ Виталий: <span class="y">16 250 ₽</span>
+Правые (7 500 ₽): Сб 09.05 17:00, Вс 10.05 10:00
+Левые  (8 750 ₽): Пн 27.04 17:00, Чт 30.04 09:00 … (5 служб)
+
+✏ Сергей: <span class="y">12 250 ₽</span>
+Правые (7 500 ₽): …
+Левые  (4 750 ₽): …</div>
+
+```
+  <div class="notice"><strong>Важно:</strong> расчёт идёт ТОЛЬКО из подтверждённого факта (<code>/факт</code> или <code>/добавить</code>). Если кого-то забыли отметить — его в расчёте не будет. Поправь через <code>/факт</code> за тот день, посчитай заново.</div>
+</div>
+```
+
+  </div>
+
+  <!-- /расписание -->
+
+  <div class="section" id="schedule">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>План на неделю или месяц</h2>
+      <span class="cmd-badge">/расписание</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Главный инструмент координации. Два режима, переключаются кнопкой <code>[Неделя | Месяц]</code>.</p>
+
+```
+  <h3>Недельный режим</h3>
+  <div class="terminal">Расписание: 11–17 мая
+```
+
+Пн 11.05
+09:00 ○         <span class="m">(пусто)</span>
+17:00 <span class="g">✅</span> Виталий
+
+Вт 12.05
+09:00 <span class="g">✅</span> Сергей
+17:00 ○
+
+Ср 13.05
+09:00 ○
+17:00 <span class="y">⭐</span> <span class="g">✅</span> Виталий, Сергей, Михаил, Илья (4/4)
+
+Чт 14.05
+09:00 <span class="b">✗</span> не наша
+17:00 ○
+
+Сб 16.05
+09:00 <span class="g">✅</span> Сергей
+17:00 <span class="y">⭐</span> <span class="g">✅</span> Виталий, Сергей, Михаил, Илья (4/4)
+
+Вс 17.05
+10:00 <span class="y">⭐</span> <span class="g">✅</span> Виталий, Сергей, Илья (3/4)
+17:00 ○</div>
+
+```
+  <div class="notice">⭐ стоит у <strong>конкретной службы</strong>, не у дня. Утренняя может быть правой, вечерняя левой — или наоборот.</div>
+
+  <h3>Тап на слот → меню действий</h3>
+  <div class="terminal"><span class="u">Если слот пустой:</span>
+```
+
+🎵 Кто поёт? (Пн 11.05 09:00)
+<span class="g">[Виталий]</span>  <span class="g">[Сергей]</span>  <span class="g">[Михаил]</span>  <span class="g">[Илья]</span>
+─────
+<span class="g">[Топ-5 замен/гостей]</span>
+<span class="g">[+ Другой (введу имя)]</span>
+─────
+<span class="g">[Отметить как правую]</span>
+<span class="b">[✗ Отменить службу]</span>
+<span class="g">[Удалить слот]</span>
+
+<span class="u">Если слот уже заполнен:</span>
+
+🎵 В слоте: Виталий, Сергей
+<span class="g">[+ Добавить]</span>
+<span class="g">[- Убрать кого-то]</span>
+<span class="g">[Очистить слот]</span>
+─────
+<span class="g">[Отметить как правую/левую]</span>
+<span class="b">[✗ Отменить службу]</span></div>
+
+```
+  <h3>Месячный режим</h3>
+  <p>Метки в ячейках: обычный день, ⭐ есть правая, ✓ все слоты заполнены, ✗ есть отменённая служба.</p>
+  <div class="tip"><strong>Зачем месячный режим:</strong> получили бумажный календарь от храма — за один заход проставили все правые на буднях, отменили дни где поёт другой хор. Дальше работаешь в недельном режиме без сюрпризов. Можно листать на 6 месяцев вперёд.</div>
+</div>
+```
+
+  </div>
+
+  <!-- /добавить -->
+
+  <div class="section" id="add">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Записать службу напрямую</h2>
+      <span class="cmd-badge">/добавить</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Когда нужна: заранее план не составили, но служба прошла; или запоздалая фиксация (была служба несколько дней назад, забыли отметить).</p>
+
+```
+  <div class="terminal"><span class="u">&gt; /добавить</span>
+```
+
+🎵 За какую дату?  <span class="g">[Сегодня]</span>  <span class="g">[Вчера]</span>  <span class="g">[Другая]</span>
+🎵 Время службы?   <span class="g">[Утро 09:00]</span>  <span class="g">[Вечер 17:00]</span>  <span class="g">[Вс утро 10:00]</span>  <span class="g">[Другое]</span>
+🎵 Тип службы?     <span class="g">[Правая ✓]</span>  <span class="g">[Левая]</span>
+
+🎵 Кто пел?
+<span class="g">☑ Виталий</span>  <span class="g">☑ Сергей</span>
+<span class="g">☑ Михаил</span>   <span class="m">☐ Илья</span>
+<span class="g">☑ Влад</span>
+<span class="g">[+ Добавить нового]</span>
+<span class="g">[✓ Готово]</span>
+
+🎵 Роли:
+• Виталий — свой
+• Сергей  — свой
+• Михаил  — свой
+• Влад    — замена
+
+<span class="g">[✓ Записать]</span>
+
+🎵 Готово:
+Сб 09.05 17:00 — правая
+<span class="b">3 750 + 3 750 + 3 750 + 3 000 = 14 250 ₽</span></div>
+</div>
+
+  </div>
+
+  <!-- /люди -->
+
+  <div class="section" id="people">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Список певцов</h2>
+      <span class="cmd-badge">/люди</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <ul>
+        <li><strong>Посмотреть всех</strong> — список с типами</li>
+        <li><strong>Добавить нового</strong> — имя → выбрать тип</li>
+        <li><strong>Поменять тип:</strong>
+          <ul>
+            <li><code>core</code> — основной (4 главных, тип фиксированный)</li>
+            <li><code>guest</code> — гостевой свой (ставка 3 750 / 1 750)</li>
+            <li><code>replacement</code> — замена (сниженная 3 000 / 1 500)</li>
+          </ul>
+        </li>
+        <li><strong>Удалить</strong> — мягкое архивирование. История сохраняется.</li>
+      </ul>
+      <div class="tip">Появилась новая замена → добавил один раз, дальше выбираешь кнопкой. Бывшая замена стала петь чаще → меняешь тип на <code>guest</code>.</div>
+    </div>
+  </div>
+
+  <!-- Типичные ситуации -->
+
+  <div class="section" id="situations">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Типичные ситуации</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+
+```
+  <div class="situation">
+    <div class="situation-q">😅 Опоздал на службу, отметить раньше не успел</div>
+    <div class="situation-a">Через час, через день — без разницы. <code>/факт</code> → выбери дату → подтверди.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">✏️ Внесли не того певца</div>
+    <div class="situation-a"><code>/факт</code> за тот день → [Изменить по слотам] → нашёл слот → убрал/добавил.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">🔄 Завтра поёт другой хор</div>
+    <div class="situation-a"><code>/расписание</code> → нашёл день → тап на конкретный слот → [Отменить службу]. Если на день целиком — отменяй каждую службу отдельно.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">➕ Доп. правая в воскресенье в 7 утра</div>
+    <div class="situation-a"><code>/расписание</code> → нашёл воскресенье → [+ доп. служба] → 07:00 → [Правая] → состав. Стандартное Вс 10:00 при этом тоже остаётся.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">🆕 Внезапно нужна замена — пришёл новый человек</div>
+    <div class="situation-a">В <code>/добавить</code> или <code>/расписание</code> → дошёл до выбора людей → [+ Другой] → ввёл имя. Этот человек теперь в списке как замена. Если пел как свой — <code>/люди</code> → измени тип на <code>guest</code>.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">😬 Прохор не пришёл — Миша спел один</div>
+    <div class="situation-a"><code>/факт</code> за этот день → [Изменить по слотам] → убрал Прохора, оставил Мишу. Расчёт берёт только из факта.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">↩️ Случайно отменил службу, а она была</div>
+    <div class="situation-a"><code>/расписание</code> → слот ✗ → тап → меню → «Снять отмену» (или просто назначь кого-то — слот станет нормальным).</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">📋 Бумажный табель не сходится с ботом</div>
+    <div class="situation-a">Открой Google Sheet (ссылку даст ответственный), сравни глазами. Скорее всего кто-то забыл <code>/факт</code>. Поправь — пересчёт автоматический.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">📊 Хочу видеть только свои службы за месяц</div>
+    <div class="situation-a"><code>/экспорт</code> → весь месяц → [Табель] → CSV → отфильтруй в Excel/Numbers по своему имени.</div>
+  </div>
+
+  <div class="situation">
+    <div class="situation-q">💤 Бот не отвечает</div>
+    <div class="situation-a">Подожди минуту. Если тишина больше получаса — пиши в чат, ответственный перезапустит. Данные не теряются — они в Google Sheets.</div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- Календарь -->
+
+  <div class="section" id="calendar">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Подключение Google Calendar к телефону</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>Правые службы синхронизируются в общий Google-календарь. Настройку и расшаривание делает ответственный — тебе нужно только подключить готовый календарь к своему устройству.</p>
+      <div class="notice"><strong>Что в календаре:</strong> только правые службы. Левые — нет, их слишком много.</div>
+
+```
+  <h3>Шаг 1. Получи доступ</h3>
+  <p>Подойди к ответственному. Он либо:</p>
+  <ul>
+    <li><strong>(A)</strong> Добавит твою Gmail в календарь — самый простой вариант.</li>
+    <li><strong>(B)</strong> Даст публичную iCal-ссылку — если нет Google-почты или не хочешь привязывать.</li>
+  </ul>
+
+  <h3>Шаг 2. iPhone / iPad → Apple Calendar</h3>
+  <p><em>Вариант A (доступ через Google-почту):</em></p>
+  <ul class="steps">
+    <li><span class="step-num">1</span><span class="step-text">Настройки → Календарь → Учётные записи → Добавить → Google</span></li>
+    <li><span class="step-num">2</span><span class="step-text">Войди той почтой, которой дали доступ</span></li>
+    <li><span class="step-num">3</span><span class="step-text">Включи переключатель Календари</span></li>
+    <li><span class="step-num">4</span><span class="step-text">Открой Календарь → найди «Хор — правые службы» → поставь галочку</span></li>
+  </ul>
+  <p><em>Вариант B (iCal-ссылка):</em></p>
+  <ul class="steps">
+    <li><span class="step-num">1</span><span class="step-text">Настройки → Календарь → Учётные записи → Добавить → Другое → Добавить подписной календарь</span></li>
+    <li><span class="step-num">2</span><span class="step-text">Вставь ссылку → Далее → Сохранить</span></li>
+  </ul>
+
+  <h3>Android → Google Calendar</h3>
+  <ul class="steps">
+    <li><span class="step-num">1</span><span class="step-text">Открой приложение Google Calendar</span></li>
+    <li><span class="step-num">2</span><span class="step-text">Меню (☰) → Настройки → Добавить учётную запись (если нужно)</span></li>
+    <li><span class="step-num">3</span><span class="step-text">Меню (☰) → пролистай до «Календари» → найди «Хор — правые службы» → включи</span></li>
+  </ul>
+
+  <h3>Что в событиях</h3>
+  <ul>
+    <li>Заголовок: Правая служба</li>
+    <li>Время: старт = время службы, конец = +2 часа</li>
+    <li>Описание: список певцов с ролью (свой/замена)</li>
+  </ul>
+  <p>Когда в боте меняется состав — описание события обновляется. Когда правая отменяется или становится левой — событие пропадает.</p>
+
+  <div class="notice">События не обновляются? Apple/Google Calendar обновляются с задержкой 10–30 минут. Можно потянуть вниз для ручной синхронизации.</div>
+</div>
+```
+
+  </div>
+
+  <!-- FAQ -->
+
+  <div class="section" id="faq">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>FAQ</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="situation">
+        <div class="situation-q">Что если я случайно сделал что-то не то?</div>
+        <div class="situation-a">Изменения — переделай через <code>/расписание</code> или <code>/факт</code>. Удаления — у Google Sheets есть история, через ответственного можно откатить.</div>
+      </div>
+      <div class="situation">
+        <div class="situation-q">Видят ли все мои действия?</div>
+        <div class="situation-a">В группе — да, ответы бота приходят в общий чат. В личке — нет, видишь только ты. База одна, поэтому изменения отразятся при следующем просмотре.</div>
+      </div>
+      <div class="situation">
+        <div class="situation-q">Кто платит за бота?</div>
+        <div class="situation-a">Никто. Хостинг бесплатный, API бесплатные.</div>
+      </div>
+      <div class="situation">
+        <div class="situation-q">Можно ли пользоваться только в группе?</div>
+        <div class="situation-a">Да. Личный режим опциональный.</div>
+      </div>
+      <div class="situation">
+        <div class="situation-q">Бот спамит?</div>
+        <div class="situation-a">Нет. Одно автоуведомление в неделю (суббота 19:00). Остальное — только по твоему запросу.</div>
+      </div>
+      <div class="situation">
+        <div class="situation-q">Можно ли использовать бота из стороннего чата?</div>
+        <div class="situation-a">Нет. Только в нашем общем чате и в личке у привязанных. В чужих местах игнорирует.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Шпаргалка -->
+
+  <div class="section" id="fridge">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Шпаргалка на холодильник</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="fridge">
+        <h4>ХОР-БОТ: ПРАВИЛА ВЫЖИВАНИЯ</h4>
+        <div class="fridge-row"><span class="label">После службы:</span><span class="cmd">/факт</span></div>
+        <div class="fridge-row"><span class="label">Конец недели:</span><span class="cmd">/расчёт</span></div>
+        <div class="fridge-row"><span class="label">Планирование:</span><span class="cmd">/расписание</span></div>
+        <div class="fridge-row"><span class="label">Сломал:</span><span class="cmd">/удалить</span></div>
+        <div class="fridge-row"><span class="label">Запутался:</span><span class="cmd">/help</span></div>
+
+```
+    <div class="commandments">
+      <h4>ДЕСЯТЬ ЗАПОВЕДЕЙ</h4>
+      <ol>
+        <li>Бот не злопамятный.</li>
+        <li>Бот не голодный.</li>
+        <li>Бот не ловит обиду.</li>
+        <li>Бот не считает «парня с калькулятором» личным врагом. Просто работу его автоматизировал. С парнем всё ок.</li>
+        <li>Бот не пингует ночью. И вечером. И утром. Только в субботу 19:00 — один раз.</li>
+        <li>Звёздочка ⭐ — это правая. Без звёздочки — левая. Деньги разные. Не путай.</li>
+        <li>Если плана не было, а служба была — <span style="color:var(--accent)">/добавить</span>. Если план был — <span style="color:var(--accent)">/факт</span>. Если оба — выбирай <span style="color:var(--accent)">/факт</span>, он умнее.</li>
+        <li>Удаление — это серьёзно. Бот спросит «уверен?». Подумай.</li>
+        <li>Не отметился — в расчёт не попал. Не плакать. Открыть <span style="color:var(--accent)">/факт</span>. Поправить.</li>
+        <li>Если бот лежит — открой Google Sheet и веди по старинке. Бога ради, без паники. Боги терпели и нам велели.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- Будущее -->
+
+  <div class="section" id="future">
+    <div class="section-header" onclick="toggle(this)">
+      <h2>Дальнейшее развитие</h2>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p>На старте не делаем — но в перспективе хорошо ложатся в этот же бот.</p>
+
+```
+  <div class="future-item">
+    <h4>📅 Полная синхронизация в календарь</h4>
+    <p>Сейчас попадают только правые службы. В перспективе — все службы, включая левые.</p>
+  </div>
+
+  <div class="future-item">
+    <h4>👤 Умная фильтрация: каждому свой календарь</h4>
+    <p>Не общий календарь на всех, а у каждого певца появляются только те службы, в которых он лично участвует. Никто не получает в свой календарь чужие службы.</p>
+  </div>
+
+  <div class="future-item">
+    <h4>🗂️ Банк замен с классификацией</h4>
+    <p>Полноценная база резервных певцов: имя, контакт, тип голоса (тенор/баритон/бас), доступность, история взаимодействий.</p>
+  </div>
+
+  <div class="future-item">
+    <h4>🤖 Автоматический поиск замен с каскадом</h4>
+    <p>Бот сам определяет нужный голос, находит первого подходящего в банке замен, шлёт уведомление в Telegram с кнопками [Да/Нет]. Если отказал — шлёт следующему. Каскад продолжается пока кто-то не согласится или список не закончится.</p>
+  </div>
+</div>
+```
+
+  </div>
+
+</div><!-- /content -->
+
+<script>
+function toggle(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+// Animate sections on scroll
+const sections = document.querySelectorAll('.section');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.animationDelay = '0s';
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05 });
+sections.forEach((s, i) => {
+  s.style.animationDelay = `${i * 0.04}s`;
+  io.observe(s);
+});
+</script>
+
+</body>
+</html>
